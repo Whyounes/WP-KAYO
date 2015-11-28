@@ -8,6 +8,9 @@ use Illuminate\Config\Repository as Config;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use App\Http\Routes;
+use Illuminate\Translation\FileLoader;
+use Illuminate\Translation\Translator;
+use Illuminate\Filesystem\Filesystem;
 
 class Application extends Container
 {
@@ -54,6 +57,8 @@ class Application extends Container
     {
         $this->registerConfigRepository();
         $this->loadConfigurationFiles($this->app->make('config'));
+        $this->registerLangRepository();
+
         $this->registerTwig();
     }
 
@@ -85,9 +90,21 @@ class Application extends Container
 
             // register Twig globals
             $twig->addGlobal('app', $this);
+            $twig->addGlobal('config', $this->get('config'));
+            $twig->addGlobal('lang', $this->get('lang'));
 
             return $twig;
         });
+    }
+
+    protected function registerLangRepository()
+    {
+        $config = $this->get('config');
+        $loader = new FileLoader(new Filesystem(), $config->get('lang.lang_path'));
+        $translator = new Translator($loader, get_locale());
+        $translator->setFallback($config->get('lang.fallback_locale'));
+
+        $this->instance('lang', $translator);
     }
 
     /**

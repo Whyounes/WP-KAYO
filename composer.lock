@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fdc7b3caaedaf642195d685e1284b526",
-    "content-hash": "cf980071093c5ff4fdb25ac655e477ef",
+    "hash": "f00c99ab0a2a56ecea7f0341f0e23836",
+    "content-hash": "93f5f01a1f0687df55d4a3e80b21fd09",
     "packages": [
         {
             "name": "danielstjules/stringy",
@@ -459,6 +459,51 @@
             "description": "The Illuminate Support package.",
             "homepage": "http://laravel.com",
             "time": "2015-10-19 06:01:02"
+        },
+        {
+            "name": "illuminate/translation",
+            "version": "v5.1.22",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/translation.git",
+                "reference": "81bf81fcb3ccc18e7aeabaefdbb7306581439fcc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/translation/zipball/81bf81fcb3ccc18e7aeabaefdbb7306581439fcc",
+                "reference": "81bf81fcb3ccc18e7aeabaefdbb7306581439fcc",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/filesystem": "5.1.*",
+                "illuminate/support": "5.1.*",
+                "php": ">=5.5.9",
+                "symfony/translation": "2.7.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminate\\Translation\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylorotwell@gmail.com"
+                }
+            ],
+            "description": "The Illuminate Translation package.",
+            "homepage": "http://laravel.com",
+            "time": "2015-08-01 00:02:33"
         },
         {
             "name": "nesbot/carbon",
