@@ -1,4 +1,6 @@
-This is a documentation for the Wordpress plugin boilerplate.
+##<img src="http://yvtwp.if36.com/wp-content/uploads/2015/10/kayoplugins.jpg" alt="KAYO Logo" align="right">WP-KAYO
+
+This is a documentation for the KAYO Wordpress plugin boilerplate.
 
 ##Container
 
