@@ -14,8 +14,11 @@ require_once __DIR__.'/vendor/autoload.php';
 
 use App\Application;
 
+$app = new Application;
+$app->boot();
+
 // Boot application
-$app = require_once __DIR__.'/bootstrap/bootstrap.php';
+require_once __DIR__.'/bootstrap/bootstrap.php';
 
 
 register_activation_hook(__FILE__, array($app, 'activatePlugin'));
@@ -29,7 +32,7 @@ add_action( 'wp_ajax_nopriv_wrm_execute', 'wrm_execute' );
 function wrm_execute()
 {
     /* 
-        BaseController should exist on the App\Http\Controllers\ namespace, 
+        ControllerHandler should exist on the App\Http\Controllers\ namespace, 
         while other controller can be changed from the config
     */
     $controller = new App\Http\Controllers\ControllerHandler;

@@ -29,3 +29,28 @@ function getConfig($name)
 
     return $config->get($name);
 }
+
+/**
+ * Trnaslate a text or a key
+ * @param  string  $text Key or text to be translated
+ * @param  boolean $echo Echo the result or return it
+ * @param  array  $args  Aditionnal args for wordpress l10n functions
+ * @return string        Translated text
+ */
+function trans($text, $echo = false, array $args = null)
+{
+    $config = Application::get('config');
+    if ( $config->get('lang.use_wordpress') )
+    {
+        $lang = Application::get('lang');
+
+        return $lang->get($text);
+    }
+
+    if ( $echo )
+    {
+        _e($text, $config->get('app.plugin_prefix'));
+    } else {
+        __($text, $config->get('app.plugin_prefix'));
+    }
+}// trans

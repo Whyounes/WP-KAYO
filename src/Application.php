@@ -11,6 +11,7 @@ use App\Http\Routes;
 use Illuminate\Translation\FileLoader;
 use Illuminate\Translation\Translator;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Collection;
 
 class Application extends Container
 {
@@ -60,6 +61,7 @@ class Application extends Container
         $this->registerLangRepository();
 
         $this->registerTwig();
+        $this->registerTwigFunctions();
     }
 
     /**
@@ -68,38 +70,71 @@ class Application extends Container
      */
     protected function registerTwig()
     {
-        $this->bind('twig.loader', function () {
-            $config = static::make('config');
+        $config = static::make('config');
+
+        $this->bind('twig.loader', function () use($config) {
             $view_paths = $config->get('app.views_path');
             $loader = new \Twig_Loader_Filesystem($view_paths);
 
             return $loader;
         });
 
-        $this->bind('twig', function () {
-            $config = static::make('config');
+        $this->bind('twig', function () use($config) {
             $options = [
                 'debug' => WP_DEBUG,
                 'cache' => $config->get('app.views_cache_path')
             ];
 
-            $twig = new \Twig_Environment(static::make('twig.loader'), $options);
+            $twig = new \Twig_Environment($this->get('twig.loader'), $options);
 
             // register Twig Extensions
             $twig->addExtension(new \Twig_Extension_Debug());
 
             // register Twig globals
             $twig->addGlobal('app', $this);
-            $twig->addGlobal('config', $this->get('config'));
+            $twig->addGlobal('config', $config);
             $twig->addGlobal('lang', $this->get('lang'));
 
             return $twig;
         });
     }
 
+    /**
+     * Load functions to Twig
+     * @return void
+     */
+    protected function registerTwigFunctions()
+    {
+        $functions = new Collection([
+            'trans'             => 'trans',
+            'actionToMenuSlug'  => 'actionToMenuSlug',
+            'getConfig'         => 'getConfig',
+        ]);
+
+        $twig = static::make('twig');
+        $functions->each(function($key, $value) use(&$twig) {
+            $twig->addFunction(
+                new \Twig_SimpleFunction($key, $value )
+            );
+        });
+    }
+
     protected function registerLangRepository()
     {
         $config = $this->get('config');
+
+        if ( $config->get('lang.use_wordpress') )
+        {
+            add_action('plugins_loaded', function () use($config) {
+                load_plugin_textdomain(
+                    $config->get('app.plugin_prefix'),
+                    false,
+                    $config->get('lang.lang_path'));
+            });
+
+            return;
+        } // if
+
         $loader = new FileLoader(new Filesystem(), $config->get('lang.lang_path'));
         $translator = new Translator($loader, get_locale());
         $translator->setFallback($config->get('lang.fallback_locale'));
